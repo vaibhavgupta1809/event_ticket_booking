@@ -1,0 +1,75 @@
+# services:
+#   app:
+#     image: event_ticket_booking:latest
+#     ports:
+#       - "3000:3000"
+#     environment:
+#       PG_HOST: 'db'
+#       PG_USER: postgres
+#       PG_PASS: 1234
+#       PG_PORT: 5432
+#     depends_on:
+#       - db
+#   db:
+#     image: postgres
+#     environment:
+#       POSTGRES_PASSWORD: 1234
+
+
+
+# version: '3'
+# services:
+#   db:
+#     image: postgres
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+#     environment:
+#       POSTGRES_USER: <%= ENV["PG_USER"] || 'postgres' %>
+#       POSTGRES_PASSWORD: <%= ENV["PG_PASS"] || '1234' %>
+
+#   web:
+#     build: .
+#     command: bundle exec rails server -b 0.0.0.0
+#     volumes:
+#       - .:/app
+#     ports:
+#       - "3000:3000"
+#     depends_on:
+#       - db
+#     environment:
+#       PG_USER: <%= ENV["PG_USER"] || 'postgres' %>
+#       PG_PASS: <%= ENV["PG_PASS"] || '1234' %>
+#       PG_HOST: db
+#       PG_PORT: 5432
+
+# volumes:
+#   postgres_data:
+
+
+
+version: '3.8'
+services:
+  app:
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && rails s -b '0.0.0.0'"
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    environment:
+      PG_USER: postgres
+      PG_PASS: 1234
+      PG_HOST: db
+      PG_PORT: 5432
+    depends_on:
+      - db
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: event_ticket_booking_development
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
