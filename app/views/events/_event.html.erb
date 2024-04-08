@@ -1,0 +1,31 @@
+<div id="<%= dom_id(event) %>" class="card mb-3">
+  <div class="card-header">
+    Event Details
+  </div>
+  <div class="card-body">
+    <h5 class="card-title"><%= event.name %></h5>
+    <p class="card-text">
+      <strong>Description:</strong>
+      <%= event.description %>
+    </p>
+    <p class="card-text">
+      <strong>Location:</strong>
+      <%= event.location %>
+    </p>
+    <p class="card-text">
+      <strong>Event date:</strong>
+      <%= l(event.event_date, format: :long) %>
+    </p>
+    <p class="card-text">
+      <strong>Total tickets:</strong>
+      <%= event.total_tickets %>
+    </p>
+    <p class="card-text">
+      <strong>Available tickets:</strong>
+      <%= event.total_tickets - event.bookings.sum(:ticket_quantity) %>
+    </p>
+  </div>
+  <div class="card-footer bg-transparent">
+    <%= link_to 'Book Tickets', new_booking_path(event_id: event.id), class: 'btn btn-secondary' %>
+  </div>
+</div>

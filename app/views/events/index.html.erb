@@ -1,0 +1,31 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col">
+      <!-- Flash Notice -->
+      <% if notice %>
+        <div class="alert alert-success" role="alert">
+          <%= notice %>
+        </div>
+      <% end %>
+
+      <!-- Page Heading -->
+      <h1 class="mb-4">Events</h1>
+
+      <!-- Link to Create New Event -->
+      <%= link_to "New event", new_event_path, class: "btn btn-success mb-4" %>
+
+      <!-- Events Display -->
+      <div id="events" class="row">
+        <% @events.each do |event| %>
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="card-body">
+                <%= render event %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

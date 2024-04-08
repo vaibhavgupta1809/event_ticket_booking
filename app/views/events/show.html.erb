@@ -1,0 +1,15 @@
+<% if notice %>
+  <div class="alert alert-success" role="alert">
+    <%= notice %>
+  </div>
+<% end %>
+
+<div class="mt-3 mb-3">
+  <%= render @event %>
+</div>
+
+<div class="btn-group" role="group" aria-label="Event Actions">
+  <%= link_to "Edit this event", edit_event_path(@event), class: "btn btn-warning" %>
+  <%= link_to "Back to events", events_path, class: "btn btn-secondary" %>
+  <%= button_to "Destroy this event", @event, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %>
+</div>
