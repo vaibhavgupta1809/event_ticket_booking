@@ -22,7 +22,7 @@
     </p>
     <p class="card-text">
       <strong>Available tickets:</strong>
-      <%= event.total_tickets - event.bookings.sum(:ticket_quantity) %>
+      <%= event.remaining_tickets %>
     </p>
   </div>
   <div class="card-footer bg-transparent">

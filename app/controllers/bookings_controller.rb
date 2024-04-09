@@ -19,29 +19,28 @@ class BookingsController < ApplicationController
   end
 
   def create
-    Event.transaction do
-      event = Event.find(booking_params[:event_id])
+    ActiveRecord::Base.transaction do
+      event = Event.lock.find(booking_params[:event_id])
       raise ActiveRecord::RecordNotFound unless event
+      @booking = event.bookings.build(user: current_user, ticket_quantity: booking_params[:ticket_quantity].to_i)
+  
+      # Build tickets for the booking
+      @booking.ticket_quantity.times do
+        @booking.tickets.build(event_id: event.id)
+      end
 
-      total_booked_tickets = event.bookings.sum(:ticket_quantity)
-      requested_tickets = booking_params[:ticket_quantity].to_i
-
-      if (event.total_tickets - total_booked_tickets) >= requested_tickets
-        booking = event.bookings.build(user: current_user, ticket_quantity: requested_tickets)
-        if booking.save
-          flash[:notice] = "Tickets successfully booked."
-          redirect_to events_path
-        else
-          flash[:alert] = booking.errors.full_messages.to_sentence
-          redirect_to events_path
-        end
-      else
-        flash[:alert] = "Not enough tickets available."
+      if @booking.save
+        flash[:notice] = "Tickets successfully booked."
         redirect_to events_path
+      else
+        render :new
       end
     end
-  rescue ActiveRecord::StaleObjectError
-    flash[:alert] = "The ticket availability has changed. Please try again."
+  rescue ActiveRecord::RecordNotFound
+    flash[:alert] = "Event not found."
+    redirect_to events_path
+  rescue ActiveRecord::LockingError
+    flash[:alert] = "The ticket booking process is currently busy."
     redirect_to events_path
   end
 

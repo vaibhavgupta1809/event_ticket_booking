@@ -3,7 +3,9 @@ class EventsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
 
   def index
-    @events = Event.all
+    @events = Rails.cache.fetch("events/all", expires_in: 1.hours) do
+      Event.all.to_a
+    end
   end
 
   def show
@@ -22,6 +24,7 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       if @event.save
+        Rails.cache.delete('events/all')
         format.html { redirect_to events_path, notice: "Event was successfully created." }
         format.json { render :show, status: :created, location: @event }
       else
@@ -34,6 +37,7 @@ class EventsController < ApplicationController
   def update
     respond_to do |format|
       if @event.update(event_params)
+        Rails.cache.delete('events/all')
         format.html { redirect_to events_path, notice: "Event was successfully updated." }
         format.json { render :show, status: :ok, location: @event }
       else
@@ -45,7 +49,7 @@ class EventsController < ApplicationController
 
   def destroy
     @event.destroy
-
+    Rails.cache.delete('events/all')
     respond_to do |format|
       format.html { redirect_to events_url, notice: "Event was successfully destroyed." }
       format.json { head :no_content }
