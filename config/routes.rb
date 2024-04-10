@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :bookings
+  resources :bookings, only: [:new, :create]
   resources :events
   devise_for :users
 

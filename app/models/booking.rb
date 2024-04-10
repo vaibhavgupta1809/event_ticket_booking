@@ -1,10 +1,9 @@
 class Booking < ApplicationRecord
   belongs_to :user
   belongs_to :event
-  has_many :tickets, dependent: :destroy
 
-  validate :ticket_quantity_with_available_tickets
   validates :ticket_quantity, presence: true
+  validate :ticket_quantity_with_available_tickets
 
   private
 
