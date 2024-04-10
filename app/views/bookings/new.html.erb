@@ -1,9 +1,31 @@
 <div class="container mt-4">
   <h1 class="mb-4">New Booking</h1>
 
-  <%= render "form", booking: @booking %>
+  <%= form_with(model: @booking) do |form| %>
+    <% if @booking.errors.any? %>
+      <div style="color: red">
+        <h2><%= pluralize(@booking.errors.count, "error") %> prohibited this booking from being saved:</h2>
 
-  <div class="mt-4">
-    <%= link_to "Back to bookings", bookings_path, class: "btn btn-secondary" %>
-  </div>
+        <ul>
+          <% @booking.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="mb-3">
+      <%= form.label :ticket_quantity, style: "display: block", class: "required-field mb-1" %>
+      <%= form.number_field :ticket_quantity %>
+    </div>
+
+    <div>
+      <%= form.hidden_field :event_id , style: "display: none"%>
+    </div>
+
+    <div>
+      <%= form.submit class: "btn btn-secondary" %>
+      <%= link_to "Close", events_path, class: "btn btn-secondary" %>
+    </div>
+  <% end %>
 </div>

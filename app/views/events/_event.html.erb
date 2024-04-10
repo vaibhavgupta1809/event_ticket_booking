@@ -1,9 +1,8 @@
 <div id="<%= dom_id(event) %>" class="card mb-3">
   <div class="card-header">
-    Event Details
+    <%= event.name %>
   </div>
   <div class="card-body">
-    <h5 class="card-title"><%= event.name %></h5>
     <p class="card-text">
       <strong>Description:</strong>
       <%= event.description %>
@@ -24,8 +23,5 @@
       <strong>Available tickets:</strong>
       <%= event.remaining_tickets %>
     </p>
-  </div>
-  <div class="card-footer bg-transparent">
-    <%= link_to 'Book Tickets', new_booking_path(event_id: event.id), class: 'btn btn-secondary' %>
   </div>
 </div>
