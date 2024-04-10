@@ -29,3 +29,14 @@ EXPOSE 3000
 
 # Run Rails server
 CMD ["rails", "server", "-b", "0.0.0.0"]
+
+
+
+# Stage for running tests
+FROM ruby:3.1.2 as tester
+WORKDIR /app
+COPY Gemfile Gemfile.lock ./
+RUN gem install bundler
+RUN bundle install
+COPY . .
+CMD ["rspec"]

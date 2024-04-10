@@ -4,6 +4,7 @@ class Booking < ApplicationRecord
   has_many :tickets, dependent: :destroy
 
   validate :ticket_quantity_with_available_tickets
+  validates :ticket_quantity, presence: true
 
   private
 
