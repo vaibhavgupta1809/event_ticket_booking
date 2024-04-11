@@ -5,3 +5,12 @@ import "bootstrap"
 // app/javascript/application.js
 import Rails from "@rails/ujs"
 Rails.start()
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.alert .close').forEach(function(button) {
+    debugger
+    button.addEventListener('click', function() {
+      this.parentElement.style.display = 'none';
+    });
+  });
+});

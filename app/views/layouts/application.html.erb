@@ -34,11 +34,11 @@
             </li>
             <% if user_signed_in? %>
               <li class="nav-item">
-                <%= link_to 'My Events & Bookings', my_events_and_bookings_path, class: 'nav-link' %>
+                <%= link_to 'My Event Bookings', my_events_and_bookings_path, class: 'nav-link' %>
               </li>
-              <li class="nav-item" style="margin-left: 100px;">
+              <li class="nav-item" style="margin-left: 800px;">
                 <!-- In your view file -->
-                <%= form_tag destroy_user_session_path, method: :delete, class: 'nav-link' do %>
+                <%= form_tag destroy_user_session_path, method: :delete, data: { turbo: false }, class: 'nav-link' do %>
                   <%= submit_tag "Logout", class: 'btn btn-link', style: 'color: inherit; text-decoration: none;' %>
                 <% end %>
               </li>
@@ -52,6 +52,14 @@
         </div>
       </div>
     </nav>
+
+
+    <% flash.each do |type, message| %>
+      <div class="alert <%= bootstrap_class_for_flash(type) %>" role="alert">
+        <%= message %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">×</button>
+      </div>
+    <% end %>
     
     <%= yield %>
   </body>

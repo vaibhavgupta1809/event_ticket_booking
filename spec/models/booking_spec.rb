@@ -1,23 +1,26 @@
 require 'rails_helper'
 
 RSpec.describe Booking, type: :model do
+  describe 'associations' do
+    it { is_expected.to belong_to(:user) }
+    it { is_expected.to belong_to(:event) }
+  end
+
   describe 'validations' do
-    let(:user) { create(:user) }
-    let(:event) { create(:event, total_tickets: 50) }
+    it { is_expected.to validate_presence_of(:ticket_quantity) }
+  end
 
-    context 'when ticket_quantity does not exceed available tickets' do
-      it 'is valid' do
-        booking = build(:booking, user: user, event: event, ticket_quantity: 10)
-        expect(booking).to be_valid
-      end
-    end
+  describe 'creating a booking' do
+    let(:user) { create(:user) } 
+    let(:event) { create(:event) } 
 
-    context 'when ticket_quantity exceeds available tickets' do
-      it 'is not valid' do
-        booking = build(:booking, user: user, event: event, ticket_quantity: 60)
-        expect(booking).not_to be_valid
-        expect(booking.errors[:ticket_quantity]).to include("cannot exceed available tickets")
-      end
+    it 'successfully creates a booking with valid attributes' do
+      booking = Booking.new(
+        user: user,
+        event: event,
+        ticket_quantity: 5
+      )
+      expect(booking).to be_valid
     end
   end
 end

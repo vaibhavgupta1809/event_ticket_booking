@@ -1,42 +1,36 @@
 <div class="container mt-5">
   <div class="row">
     <div class="col">
-      <!-- Flash Notice -->
-      <% if notice %>
-        <div class="alert alert-success" role="alert">
-          <%= notice %>
-        </div>
-      <% end %>
-
+     
       <!-- Page Heading -->
-      <h1 class="mb-4">My Events</h1>
+      <% if current_user.admin? %>
+        <h1 class="mb-4">My Events</h1>
 
-      <!-- Link to Create New Event -->
-
-      <!-- Events Display -->
-      <div id="events" class="row">
-        <p class="mb-10 text-danger"><%= "you have not created any events yet.." if @my_events.count == 0%></p>
-        <% @my_events.each do |event| %>
-          <div class="col-md-4 mb-3">
-            <div class="card">
-              <div class="card-body">
-                <%= render event %>
-                <div class="card-footer bg-transparent">
-                  <%= link_to 'Book Tickets', new_booking_path(event_id: event.id), class: 'btn btn-secondary' %>
-                  <div class="btn-group" role="group" aria-label="Event Actions">
-                    <%= link_to edit_event_path(event), class: "btn btn-warning me-2" do %>
-                      <i class="bi bi-pencil-fill"></i>
-                    <% end %>
-                    <%= button_to event, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" do %>
-                      <i class="bi bi-trash-fill"></i>
-                    <% end %>
+        <!-- Events Display -->
+        <div id="events" class="row">
+          <p class="mb-10 text-danger"><%= "you have not created any events yet.." if current_user.events.count == 0%></p>
+          <% current_user.events.each do |event| %>
+            <div class="col-md-4 mb-3">
+              <div class="card">
+                <div class="card-body">
+                  <%= render event %>
+                  <div class="card-footer bg-transparent">
+                    <%= link_to 'Book Tickets', new_event_booking_path(event.id), class: 'btn btn-primary' %>
+                    <div class="btn-group" role="group" aria-label="Event Actions">
+                      <%= link_to edit_event_path(event), class: "btn btn-warning me-2" do %>
+                        <i class="bi bi-pencil-fill"></i>
+                      <% end %>
+                      <%= button_to event, method: :delete, data: { confirm: "Are you sure?", turbo: false }, class: "btn btn-danger" do %>
+                        <i class="bi bi-trash-fill"></i>
+                      <% end %>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        <% end %>
-      </div>
+          <% end %>
+        </div>
+      <% end %>
 
       <h1 class="mb-4">My Booking</h1>
 
@@ -44,13 +38,28 @@
 
       <!-- Events Display -->
       <div id="events" class="row">
-      <p class="mb-10 text-danger"><%= "No bookings" if @bookings.count == 0%></p>
-        <% @bookings.each do |booking| %>
+      <p class="mb-10 text-danger"><%= "No bookings" if current_user.bookings.count == 0%></p>
+        <% current_user.bookings.each do |booking| %>
           <div class="col-md-4 mb-3">
             <div class="card">
               <div class="card-body">
                 <div class="card-body">
-                  <%= render booking.event %>
+                  <p class="card-text">
+                    <strong>Event - </strong>
+                    <%= booking.event.name %>
+                  </p>
+                  <p class="card-text">
+                    <strong>Location - </strong>
+                    <%= booking.event.location %>
+                  </p>
+                  <p class="card-text">
+                    <strong>Event Date - </strong>
+                    <%= booking.event.event_date %>
+                  </p>
+                  <p class="card-text">
+                    <strong>Booked Tickets - </strong>
+                    <%= booking.ticket_quantity %>
+                  </p>
                 </div>
               </div>
             </div>

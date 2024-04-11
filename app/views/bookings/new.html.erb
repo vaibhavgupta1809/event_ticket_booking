@@ -1,7 +1,7 @@
 <div class="container mt-4">
   <h1 class="mb-4">New Booking</h1>
 
-  <%= form_with(model: @booking) do |form| %>
+  <%= form_with(model: [@event, @booking], data: { turbo: false }) do |form| %>
     <% if @booking.errors.any? %>
       <div style="color: red">
         <h2><%= pluralize(@booking.errors.count, "error") %> prohibited this booking from being saved:</h2>

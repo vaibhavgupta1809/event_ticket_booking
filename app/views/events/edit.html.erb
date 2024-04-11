@@ -1,10 +1,7 @@
-<h1>Editing event</h1>
 
-<%= render "form", event: @event %>
+<div class="container mt-5">
+  <div class="text-start"><h1>Editing event</h1></div>
+  <div class="text-end"><%= link_to "Close", events_path, class: "btn btn-primary", style: "text-decoration: none;" %></div>
 
-<br>
-
-<div>
-  <%= link_to "Show this event", @event %> |
-  <%= link_to "Back to events", events_path %>
+  <%= render "form", event: @event %>
 </div>

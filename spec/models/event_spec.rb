@@ -1,28 +1,31 @@
 require 'rails_helper'
 
 RSpec.describe Event, type: :model do
+  describe 'associations' do
+    it { is_expected.to belong_to(:user) }
+    it { is_expected.to have_many(:bookings).dependent(:destroy) }
+  end
 
-  describe "custom methods" do
-    describe "#remaining_tickets" do
+  describe 'validations' do
+    it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to validate_presence_of(:description) }
+    it { is_expected.to validate_presence_of(:location) }
+    it { is_expected.to validate_presence_of(:event_date) }
+    it { is_expected.to validate_presence_of(:total_tickets) }
+
+    context 'total tickets validation on update' do
       let(:event) { create(:event, total_tickets: 100) }
-      let!(:booking1) { create(:booking, event: event, ticket_quantity: 20) }
-      let!(:booking2) { create(:booking, event: event, ticket_quantity: 30) }
+      let!(:booking) { create(:booking, event: event, ticket_quantity: 30) }
 
-      it "returns the correct number of remaining tickets" do
-        create_list(:ticket,20, event: event, booking: booking1)
-        create_list(:ticket,30, event: event, booking: booking2)
-        expect(event.remaining_tickets).to eq(50)
+      it 'does not allow reducing total tickets below booked quantity' do
+        event.total_tickets = 20
+        expect(event.valid?).to be false
+        expect(event.errors[:total_tickets]).to include(" - Already booked 30 tickets.")
       end
 
-      context "when there are no bookings" do
-        before do
-          booking1.destroy
-          booking2.destroy
-        end
-        
-        it "returns the total number of tickets" do
-          expect(event.remaining_tickets).to eq(event.total_tickets)
-        end
+      it 'allows increasing total tickets' do
+        event.total_tickets = 200
+        expect(event.valid?).to be true
       end
     end
   end

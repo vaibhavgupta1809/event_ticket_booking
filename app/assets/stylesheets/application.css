@@ -18,3 +18,18 @@
   content: " *";
   color: red;
 }
+
+.close {
+  float: right;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 20px;
+  color: black;
+  text-shadow: none;
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.close:hover {
+  opacity: 1;
+}

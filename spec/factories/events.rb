@@ -5,6 +5,7 @@ FactoryBot.define do
     location { "South Carterton" }
     event_date { "Tue, 12 Nov 2024 03:24:29.391035000 UTC +00:00" }
     total_tickets { 330 }
+    available_tickets {330}
     association :user
   end
 end

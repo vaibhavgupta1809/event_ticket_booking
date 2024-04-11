@@ -15,13 +15,6 @@ RSpec.describe EventsController, type: :controller do
     end
   end
 
-  describe "GET #show" do
-    it "assigns the requested event to @event" do
-      get :show, params: { id: event.id }
-      expect(assigns(:event)).to eq(event)
-    end
-  end
-
   describe "GET #new" do
     it "assigns a new Event to @event" do
       get :new
@@ -46,7 +39,7 @@ RSpec.describe EventsController, type: :controller do
 
       it "redirects to the event index" do
         post :create, params: { event: attributes_for(:event) }
-        expect(response).to redirect_to(events_path)
+        expect(response).to redirect_to(my_events_and_bookings_path)
       end
     end
 
@@ -74,7 +67,7 @@ RSpec.describe EventsController, type: :controller do
 
       it "redirects to the event index" do
         put :update, params: { id: event.id, event: { name: "Updated Event" } }
-        expect(response).to redirect_to(events_path)
+        expect(response).to redirect_to(my_events_and_bookings_path)
       end
     end
 
@@ -100,7 +93,7 @@ RSpec.describe EventsController, type: :controller do
 
     it "redirects to events#index" do
       delete :destroy, params: { id: event.id }
-      expect(response).to redirect_to events_url
+      expect(response).to redirect_to my_events_and_bookings_path
     end
   end
 

@@ -1,4 +1,4 @@
-<%= form_with(model: event, class: "mt-4") do |form| %>
+<%= form_with(model: event, class: "mt-4", data: { turbo: false }) do |form| %>
   <% if event.errors.any? %>
     <div class="alert alert-danger">
       <h2><%= pluralize(event.errors.count, "error") %> prohibited this event from being saved:</h2>
@@ -12,27 +12,27 @@
   <% end %>
 
   <div class="mb-3">
-    <%= form.label :name, class: "form-label" %>
+    <%= form.label :name, class: "form-label required-field" %>
     <%= form.text_field :name, class: "form-control" %>
   </div>
 
   <div class="mb-3">
-    <%= form.label :description, class: "form-label" %>
+    <%= form.label :description, class: "form-label required-field" %>
     <%= form.text_area :description, class: "form-control" %>
   </div>
 
   <div class="mb-3">
-    <%= form.label :location, class: "form-label" %>
+    <%= form.label :location, class: "form-label required-field" %>
     <%= form.text_field :location, class: "form-control" %>
   </div>
 
   <div class="mb-3">
-    <%= form.label :event_date, class: "form-label" %>
+    <%= form.label :event_date, class: "form-label required-field" %>
     <%= form.datetime_field :event_date, class: "form-control" %>
   </div>
 
   <div class="mb-3">
-    <%= form.label :total_tickets, class: "form-label" %>
+    <%= form.label :total_tickets, class: "form-label required-field" %>
     <%= form.number_field :total_tickets, class: "form-control" %>
   </div>
 

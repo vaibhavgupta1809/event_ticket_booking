@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-  before_action :set_event, only: %i[ show edit update destroy ]
+  before_action :set_event, only: %i[ edit update destroy ]
   skip_before_action :authenticate_user!, only: [:index]
   
 
@@ -22,16 +22,18 @@ class EventsController < ApplicationController
 
     if @event.save
       Rails.cache.delete('events/all')
-      redirect_to events_path, notice: "Event was successfully created." 
+      redirect_to my_events_and_bookings_path, notice: "Event was successfully created." 
     else
       render :new, status: :unprocessable_entity
     end
   end
 
   def update
+    @event.available_tickets = event_params[:total_tickets].to_i - @event.bookings.sum(:ticket_quantity) if @event.valid?
     if @event.update(event_params)
       Rails.cache.delete('events/all')
-      redirect_to events_path, notice: "Event was successfully updated."
+      flash[:notice] = 'Event was successfully updated.'
+      redirect_to my_events_and_bookings_path
     else
       render :edit, status: :unprocessable_entity 
     end
@@ -40,23 +42,26 @@ class EventsController < ApplicationController
   def destroy
     if @event.destroy
       Rails.cache.delete('events/all')
-      redirect_to events_url, notice: "Event was successfully destroyed."
+      redirect_to my_events_and_bookings_path, notice: "Event was successfully destroyed."
     else
-      redirect_to events_url, alert: "Failed to destroy event."
+      redirect_to my_events_and_bookings_path, alert: "Failed to destroy event."
     end
   end
 
   def user_event_and_bookings
-    @bookings = current_user.bookings
-    @my_events = Event.where(user: current_user)
   end
 
   private
     def set_event
-      @event = Event.find(params[:id])
+      @event = Event.find_by(id: params[:id])
+      unless @event
+        redirect_to my_events_and_bookings_path, notice: "Event not found."
+      end
     end
 
     def event_params
-      params.require(:event).permit(:name, :description, :location, :event_date, :total_tickets)
+      permitted_params = params.require(:event).permit(:name, :description, :location, :event_date, :total_tickets)
+      permitted_params.merge!(available_tickets: permitted_params[:total_tickets]) if ['create'].include?(action_name)
+      permitted_params
     end
 end
