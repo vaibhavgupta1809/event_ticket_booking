@@ -1,24 +1,61 @@
-# README
+Event Ticket Booking System :-
+    This Ruby on Rails application provides a platform for event organizers to create events and for users to book tickets for these events. The backend leverages Docker, Kubernetes, Redis, and PostgreSQL to handle data storage and processing efficiently.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Prerequisites:- 
+    Docker
+    Kubernetes
+    Minikube
+    Ruby 3.1.2
+    Rails 7.0.8.1
+    PostgreSQL
+    Redis
 
-Things you may want to cover:
+Getting Started
+To get the application running on your local machine, follow these steps:
 
-* Ruby version
+1. Clone the repository
+  Clone & go to the project directory
 
-* System dependencies
+2. Setup docker and kubernetes
+  >> install docker 
+    Docker can be installed from the Docker website. Follow the official guide specific to your operating system.
+    
+    and the run 
 
-* Configuration
+    * docker-compose build
 
-* Database creation
+    * docker-compose run app bundle install
 
-* Database initialization
+    * docker-compose up
+    
+  
+  >> Install kubectl to interact with your Kubernetes cluster.
 
-* How to run the test suite
+  >> Install Minikube
+      Download and install Minikube.
 
-* Services (job queues, cache servers, search engines, etc.)
+      * curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 
-* Deployment instructions
+      * chmod +x minikube
 
-* ...
+      * sudo mv minikube /usr/local/bin/
+
+      * minikube start
+
+      And then run these command - 
+        * kubectl apply -f metrics-server-deployment.yaml
+        * kubectl apply -f rails-app-deployment.yaml
+        * kubectl apply -f rails-app-hpa.yaml
+
+3. Database Setup
+  To set up the initial database and include all necessary tables:
+    * docker-compose run app rails db:create db:migrate
+
+    * docker-compose run app rails db:seed
+  
+4. Access the Application
+   After starting the containers, the Rails application should be accessible via:
+    
+    * http://0.0.0.0:3000
+
+

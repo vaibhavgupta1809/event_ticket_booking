@@ -3,6 +3,7 @@ class Event < ApplicationRecord
   has_many :bookings, dependent: :destroy
   
   validates :name, :description, :location, :event_date, :total_tickets, presence: true
+  validates :total_tickets, numericality: { greater_than: 0 }
   validate :total_tickets_validate, on: :update
 
   private

@@ -10,15 +10,14 @@ class EventsController < ApplicationController
   end
 
   def new
-    @event = Event.new
+    @event = current_user.events.new
   end
 
   def edit
   end
 
   def create
-    @event = Event.new(event_params)
-    @event.user = current_user
+    @event = current_user.events.new(event_params.merge(available_tickets: event_params[:total_tickets]))
 
     if @event.save
       Rails.cache.delete('events/all')
@@ -60,8 +59,6 @@ class EventsController < ApplicationController
     end
 
     def event_params
-      permitted_params = params.require(:event).permit(:name, :description, :location, :event_date, :total_tickets)
-      permitted_params.merge!(available_tickets: permitted_params[:total_tickets]) if ['create'].include?(action_name)
-      permitted_params
+      params.require(:event).permit(:name, :description, :location, :event_date, :total_tickets)
     end
 end
